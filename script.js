@@ -75,6 +75,7 @@ function expenseAdd(newExpense) {
 
         expenseList.append(expenseItem)
 
+        clearForm()
         updateTotals()
     } catch (error) {
         console.log(error)
@@ -115,3 +116,11 @@ expenseList.addEventListener('click', event => {
 
     updateTotals()
 })
+
+function clearForm() {
+    expense.value = ""
+    category.value = ""
+    amount.value = ""
+
+    expense.focus()
+}
