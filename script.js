@@ -4,6 +4,7 @@ const expense = document.getElementById("expense")
 const category = document.getElementById("category")
 const expenseList = document.querySelector("ul")
 const expensesQuantity = document.querySelector('aside header p span')
+const totalAmountOfExpenses = document.querySelector("aside header h2")
 
 amount.oninput = () => {
     let value = amount.value.replace(/\D/g, "")
@@ -61,7 +62,9 @@ function expenseAdd(newExpense) {
         expenseAmount.classList.add('expense-amount')
         expenseAmount.innerHTML = `<small>R$</small>${newExpense.amount
             .toUpperCase()
-            .replace('R$', '')}`
+            .replace('R$', '')
+            .replace(/\s+/g, '')
+            }`
 
         const removeIcon = document.createElement('img')
         removeIcon.classList.add('remove-icon')
@@ -81,8 +84,24 @@ function expenseAdd(newExpense) {
 function updateTotals() {
     try {
         const items = expenseList.children
-
         expensesQuantity.textContent = `${items.length} ${items.length == 1 ? "despesa" : "despesas"}`
+
+        let totalAmount = 0
+        for (let i = 0; i < items.length; i++) {
+            totalAmount += parseFloat(items[i].querySelector('.expense-amount')
+                .textContent.replace('R$', '')
+                .replace('.', '')
+                .replace(',', '.'))
+        }
+
+        totalAmount = parseFloat(totalAmount.toFixed(2))
+        totalAmount = formatCurrencyBRL(totalAmount)
+
+        totalAmountOfExpenses.innerHTML = `<small>R$</small>${totalAmount
+            .toUpperCase()
+            .replace('R$', '')
+            .replace(/\s+/g, '')
+            }`
 
     } catch (error) {
         console.log(error)
